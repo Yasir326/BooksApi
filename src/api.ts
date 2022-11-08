@@ -2,7 +2,7 @@ import { Book, RequestParams } from './types';
 import axios, { AxiosResponse } from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://api.book-seller-example.com/',
+  baseURL: 'http://api.book-buy.com/',
   timeout: 5000
 });
 
@@ -14,7 +14,7 @@ const bookRequests = {
 };
 
 export const GetBookList = {
-  getBooksByAuthor: (params: RequestParams): Promise<Book[]> =>
+  getBooksByAuthor: (params: RequestParams): Promise<Book[]> | string =>
     bookRequests.get('/books/by-author?q=', params),
   getBooksByPublisher: (params: RequestParams): Promise<Book[]> =>
     bookRequests.get('/books/by-publisher?q=', params),

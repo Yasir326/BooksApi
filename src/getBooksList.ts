@@ -1,10 +1,13 @@
 import { GetBookList } from './api';
-import { Book, RequestParams } from './types';
+import { Book, RequestParams, XMLResponse } from './types';
+import xml2js from 'xml2js';
 
 export const getBooks = async (params: RequestParams) => {
   try {
     const books = await GetBookList.getBooksByAuthor(params);
-    return params.format == 'json' ? mapJSONResponse(books) : mapXml(books);
+    return typeof books === 'string'
+      ? mapXmlToJson(books)
+      : mapJSONResponse(books);
   } catch (error: any) {
     if (error.response.status == 404) {
       console.error(error);
@@ -26,19 +29,24 @@ export function mapJSONResponse(books: Book[]) {
   });
 }
 
-export function mapXml(books: Book[]) {
-  let data = `<?xml version="1.0" encoding="UTF-8"?>`;
-  data += `<books>`;
-  for (let item of books) {
-    data += `<book>
-           <title>${item.book.title}</title>
-           <author>${item.book.author}</author>
-           <isbn>${item.book.isbn}</isbn>
-           <quantity>${item.stock.quantity}</quantity>
-           <price>${item.stock.price}</price>
-        </book>`;
-  }
+export async function parseXml(xmlString: string): Promise<XMLResponse[]> {
+  const parser = new xml2js.Parser({ explicitArray: false });
+  return await new Promise((resolve, reject) =>
+    parser.parseString(xmlString, (err: any, jsonData: XMLResponse) => {
+      if (err) {
+        reject(`Unable to parse to xml due to: ${err}`);
+      }
+      console.log(JSON.stringify([jsonData]));
+      resolve([jsonData]);
+    })
+  );
+}
 
-  data += `</books>`;
-  return data;
+export async function mapXmlToJson(xmlString: string) {
+  try {
+    const parsedXML = await parseXml(xmlString);
+    return parsedXML[0].books.book;
+  } catch (error) {
+    throw new Error('Could not map object');
+  }
 }

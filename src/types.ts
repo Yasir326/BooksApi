@@ -11,6 +11,18 @@ export type Book = {
   };
 };
 
+export type XMLResponse = {
+  books: {
+    book: [
+      title: string,
+      author: string,
+      isbn: string,
+      quantity: number,
+      price: number
+    ];
+  };
+};
+
 export type RequestParams = {
   authorName: string;
   limit: number;
