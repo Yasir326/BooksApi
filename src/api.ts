@@ -16,8 +16,8 @@ const bookRequests = {
 export const GetBookList = {
   getBooksByAuthor: (params: RequestParams): Promise<Book[]> | string =>
     bookRequests.get('/books/by-author?q=', params),
-  getBooksByPublisher: (params: RequestParams): Promise<Book[]> =>
+  getBooksByPublisher: (params: RequestParams): Promise<Book[]> | string =>
     bookRequests.get('/books/by-publisher?q=', params),
-  getBooksByYearPublished: (params: RequestParams): Promise<Book[]> =>
+  getBooksByYearPublished: (params: RequestParams): Promise<Book[]> | string =>
     bookRequests.get('/books/by-year-published?q=', params)
 };
