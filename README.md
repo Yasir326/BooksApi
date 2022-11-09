@@ -46,7 +46,7 @@ As we are using a dummy endpoint, there is no local running instance however the
 ```
 
 
-2. axios converts anything which `text/json` into a string. So I made the following assumption that the xml string would look like the following if the format was `xml`.
+2. `Axios` converts anything which is not `text/json` into a `string`. So I made the following assumption that the `xml` string would look like the following if the format was `xml`.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
